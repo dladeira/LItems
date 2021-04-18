@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import eu.ladeira.zitems.ZItems;
+import eu.ladeira.zitems.events.ArmorProtectEvent;
 import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_16_R3.PacketPlayOutWorldParticles;
 import net.minecraft.server.v1_16_R3.ParticleType;
@@ -176,6 +177,9 @@ public class FullAuto implements FiringArchitecture {
 	public void land(Player p, Projectile proj, Location loc, Entity hit) {
 		if ((hit != null) && (hit instanceof LivingEntity)) {
 			LivingEntity entity = (LivingEntity) hit;
+			double finalDamage = this.getDamage(); // Damage post armor
+			if (entity instanceof Player) finalDamage = ArmorProtectEvent.calculateProtection(((Player) entity), this.getDamage());
+			
 			
 			entity.setNoDamageTicks(0); // Remove invincibility
 			
@@ -183,7 +187,7 @@ public class FullAuto implements FiringArchitecture {
 			entity.setVelocity(proj.getVelocity().normalize().multiply(0.25));
 			
 			// Damage entity taking into account the damage dropoff
-			entity.damage(this.getDamage() - this.getDamageDropoff(((Location) proj.getMetadata("fired_location").get(0).value()), proj.getLocation()));
+			entity.damage(finalDamage - this.getDamageDropoff(((Location) proj.getMetadata("fired_location").get(0).value()), proj.getLocation()));
 			
 		}
 		projectiles.remove(proj);

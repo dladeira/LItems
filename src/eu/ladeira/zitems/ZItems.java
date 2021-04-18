@@ -1,5 +1,7 @@
 package eu.ladeira.zitems;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,6 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import eu.ladeira.zitems.armor.ArmorSlot;
+import eu.ladeira.zitems.armor.Wearable;
+import eu.ladeira.zitems.events.ArmorProtectEvent;
 import eu.ladeira.zitems.events.FirearmFire;
 import eu.ladeira.zitems.events.ProjectileLand;
 import eu.ladeira.zitems.firearm.Ammo;
@@ -25,7 +30,7 @@ public class ZItems extends JavaPlugin implements CommandExecutor {
 		plugin.saveConfig(); // Generate config file
 		
 		this.getCommand("zitems").setExecutor(this);
-		registerEvent(new FirearmFire(), new ProjectileLand());
+		registerEvent(new FirearmFire(), new ProjectileLand(), new ArmorProtectEvent());
 		Ammo.loadAmmoFromConfig();
 		Firearm.loadFirearmFromConfig();
 		
@@ -62,6 +67,10 @@ public class ZItems extends JavaPlugin implements CommandExecutor {
 			p.sendMessage("oops");
 		} else if (args.length == 2) {
 			p.getInventory().addItem(Ammo.getAmmo(args[0]).getAmmo(64));
+		} else if (args.length == 3) {
+			Wearable wearable = new Wearable("test", "great test", Rarity.COMMON, ArmorSlot.valueOf(args[0]), 10, Math.round(new Random().nextFloat() * 1000000), Integer.valueOf(args[1]));
+			ZItem.addItem(wearable);
+			p.getInventory().addItem(wearable.generateItemStack());
 		}
 		return true;
 	}
