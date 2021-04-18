@@ -55,7 +55,11 @@ public class ZItems extends JavaPlugin implements CommandExecutor {
 		Player p = (Player) sender;
 		if (args.length == 1) {
 			int id = Integer.parseInt(args[0]);
-			p.getInventory().setItemInMainHand(ZItem.getItem(id).generateItemStack());
+			ZItem item = ZItem.getItem(id);
+			if (item != null)
+			p.getInventory().setItemInMainHand(item.generateItemStack());
+			else
+			p.sendMessage("oops");
 		} else if (args.length == 2) {
 			p.getInventory().addItem(Ammo.getAmmo(args[0]).getAmmo(64));
 		}

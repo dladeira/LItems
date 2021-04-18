@@ -1,20 +1,22 @@
 package eu.ladeira.zitems.firearm;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import eu.ladeira.zitems.Rarity;
+import eu.ladeira.zitems.Texture;
 import eu.ladeira.zitems.ZItem;
 import eu.ladeira.zitems.ZItems;
-import net.md_5.bungee.api.ChatColor;
 
 public class Firearm extends ZItem {
 	
 	private FiringArchitecture fa;
 	private ReloadingArchitecture ra;
 	
-	public Firearm(String name, String desc, Rarity rarity, int id, FirearmType type, FiringArchitecture fa, ReloadingArchitecture ra) {
-		super(name + " " + ChatColor.GRAY + "<" + ChatColor.WHITE + ra.getClipSize() + ChatColor.GRAY + ">", desc, rarity, type.name(), id);
+	public Firearm(String name, String desc, Rarity rarity, int textureId, int id, FirearmType type, FiringArchitecture fa, ReloadingArchitecture ra) {
+		super(name + " " + ChatColor.GRAY + "<" + ChatColor.WHITE + ra.getClipSize() + ChatColor.GRAY + ">", desc, rarity, type.name(), new Texture(Material.DIAMOND_PICKAXE, textureId), id);
 		
 		this.fa = fa;
 		this.ra = ra;
@@ -61,6 +63,7 @@ public class Firearm extends ZItem {
 				continue;
 			}
 			int id = ZItems.getConf().getInt("firearm." + name + ".id");
+			int textureId = ZItems.getConf().getInt("firearm." + name + ".textureId");
 			FirearmType type;
 			try {
 				type = FirearmType.valueOf(ZItems.getConf().getString("firearm." + name + ".type"));
@@ -79,8 +82,8 @@ public class Firearm extends ZItem {
 				System.out.println("Invalid reloading architecture: " + ZItems.getConf().getString("firearm." + name + ".ra.type"));
 				continue;
 			}
-			System.out.println("Adding item " + name + ":" + desc + ":" + rarity + ":" + id + ":" + type);
-			Firearm fire = new Firearm(name, desc, rarity, id, type, fa, ra);
+			System.out.println("Adding item " + name + ":" + desc + ":" + rarity + ":" + textureId + ":" + + id + ":" + type);
+			Firearm fire = new Firearm(name, desc, rarity, textureId, id, type, fa, ra);
 			ZItem.addItem(fire);
 		}
 	}

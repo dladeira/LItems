@@ -3,9 +3,7 @@ package eu.ladeira.zitems;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ZItem { // Do not create instance of directly
@@ -59,21 +57,23 @@ public class ZItem { // Do not create instance of directly
 	
 	private Rarity rarity;
 	private String category;
+	private Texture texture;
 	
 	private int id;
 	
-	public ZItem(String name, String desc, ArrayList<String> stats, Rarity rarity, String category, int id) {
+	public ZItem(String name, String desc, ArrayList<String> stats, Rarity rarity, String category, Texture texture, int id) {
 		this.name = name;
 		this.description = desc;
 		this.statistics = stats;
 		this.rarity = rarity;
 		this.category = category;
+		this.texture = texture;
 		
 		this.id = id;
 	}
 	
-	public ZItem(String name, String desc, Rarity rarity, String category, int id) {
-		this(name, desc, new ArrayList<>(), rarity, category, id);
+	public ZItem(String name, String desc, Rarity rarity, String category,  Texture texture, int id) {
+		this(name, desc, new ArrayList<>(), rarity, category, texture, id);
 	}
 	
 	public String getName() {
@@ -104,12 +104,14 @@ public class ZItem { // Do not create instance of directly
 		return this.id;
 	}
 	
+	public Texture getTexture() {
+		return this.texture;
+	}
+	
 	public ItemStack generateItemStack() {
-		ItemStack is = new ItemStack(Material.DIAMOND_PICKAXE);
+		ItemStack is = this.getTexture().getItem();
 		ItemMeta im = is.getItemMeta();
 		
-		im.setUnbreakable(true); // Hides durability bar
-		((Damageable)im).setDamage(id); // Custom textures based on item durability
 		im.setDisplayName(this.getRarityColor() + this.getName());
 		
 		ArrayList<String> lore = new ArrayList<>();

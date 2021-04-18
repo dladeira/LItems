@@ -1,1 +1,7 @@
 bin/
+
+
+#Eclipse
+.project
+.externalToolBuilders/
+.classpath

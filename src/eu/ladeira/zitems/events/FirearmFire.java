@@ -20,6 +20,7 @@ public class FirearmFire implements Listener {
 		
 		if (zitem != null && zitem instanceof Firearm) { // Item exists and is a firearm
 			handleFirearmAction(e.getPlayer(), is, (Firearm) zitem, e.getAction());
+			e.setCancelled(true);
 		}
 	}
 	
